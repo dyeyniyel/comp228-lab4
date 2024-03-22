@@ -18,4 +18,5 @@ All the information about the student will be displayed in a text area component
 
 My code output:
 
-![image](https://github.com/dyeyniyel/comp228-lab4/assets/158533198/dfad3a7e-3576-4456-9b2e-564fac915cb8)
+<img width="597" alt="image" src="https://github.com/dyeyniyel/comp228-lab4/assets/158533198/4f92fc8a-73b9-4a0d-bf09-05dafe7be1fa">
+
