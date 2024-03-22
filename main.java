@@ -1,5 +1,6 @@
 package exercise1;
 	
+import javax.swing.JOptionPane;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -122,18 +123,27 @@ public class Main extends Application {
         Button displayButton = new Button("Display");
         displayButton.setPrefWidth(100);
           
+        //Add the Clear button above the text area
+        Button clearButton = new Button("Clear");
+        clearButton.setPrefWidth(100);
+       
         //Create the TextArea
         TextArea textArea = new TextArea();
         textArea.setPrefHeight(200); 
-         
-        //Create a VBox to hold the button and the text area
+
+        //Create HBox to hold the buttons
+        HBox buttonsBox = new HBox(displayButton, clearButton);
+        buttonsBox.setAlignment(Pos.CENTER); // align buttons to the center
+        buttonsBox.setSpacing(100);
+
+        //Create a VBox to hold the button HBox and the text area
         VBox vbox = new VBox(10); // spacing 
         vbox.setAlignment(Pos.CENTER); // align contents to the center
-        vbox.getChildren().addAll(displayButton, textArea);
+        vbox.getChildren().addAll(buttonsBox, textArea);
 
         //Add the TextArea to the bottom of the BorderPane
         root.setBottom(vbox);
-        
+  
         //Set GridPane to the center of BorderPane
         root.setCenter(pane);
         
@@ -143,13 +153,13 @@ public class Main extends Application {
         csRButton.setOnAction(e -> {
             coursesBox.getItems().clear();  //this will clear all items on coursesBox upon clicking a new radio button
             coursesBox.getItems().addAll("Java","C++","SQL", "Python", "C#" ); //possible options on coursesBox
-            selectedCoursesList.getItems().clear(); //this will clear all items on courses list upon clicking a new radio button
+       //     selectedCoursesList.getItems().clear(); //this will clear all items on courses list upon clicking a new radio button
         });
 
         businessRButton.setOnAction(e -> {
             coursesBox.getItems().clear();
             coursesBox.getItems().addAll("Business 101", "Accounting 101", "Comm 101");
-            selectedCoursesList.getItems().clear();
+         //   selectedCoursesList.getItems().clear();
         });
 
         //Add event handler for the the combo box
@@ -168,24 +178,25 @@ public class Main extends Application {
                     provinceField.getText().isEmpty() || cityField.getText().isEmpty() ||
                     postalCodeField.getText().isEmpty() || phoneNumberField.getText().isEmpty() ||
                     emailField.getText().isEmpty()) {
-                textArea.setText("PLEASE FILL IN ALL THE FIELDS");
+            	JOptionPane.showMessageDialog(null,"PLEASE FILL IN ALL THE FIELDS");
             }
             //if a course has not been selected, display message
             else if ( selectedCoursesList.getItems().isEmpty()) {
-                textArea.setText("PLEASE SELECT A COURSE");
+            	JOptionPane.showMessageDialog(null,"PLEASE SELECT A COURSE");
             }
             //if the phone number field contains anything else except a number, ")", "(" and "-", display message
             else if (!phoneNumberField.getText().matches("[0-9()\\- ]*"))
             {
-                textArea.setText("Please enter a valid number");
+            	JOptionPane.showMessageDialog(null,"PLEASE ENTER A VALID NUMBER");
             }
             //if the email address field does not contain a domain address (i.e, an "@" symbol and ".com" or ".ca", etc), display message
             else if (!emailField.getText().contains("@") || !emailField.getText().contains(".") || emailField.getText().endsWith(".")) {
-                textArea.setText("Email address should be valid. A valid email address should have a domain");
+            	JOptionPane.showMessageDialog(null,"Email address should be valid. A valid email address should have a domain");
             }
             else //if all fields are properly populated, display values
             {
-            String studentInfo = "Student Name: " + nameField.getText() + ",  "
+            String studentInfo = "Student Info " + textArea.getText().split("Student Info ").length + "\n"; // Header with count 
+            	studentInfo += "Student Name: " + nameField.getText() + ",  "
                     + "Address: " + addressField.getText() + ",  "
                     + "Province: " + provinceField.getText() + ",  "
                     + "City: " + cityField.getText() + ",  "
@@ -201,8 +212,55 @@ public class Main extends Application {
             for (String course : selectedCoursesList.getItems()) {
                 studentInfo += course + "\n";
             }        
-            textArea.setText(studentInfo);
-        }});
+            textArea.appendText(studentInfo + "\n"); // Append instead of setText
+            
+            // Clear all text fields once Display button is clicked
+            nameField.clear();
+            addressField.clear();
+            provinceField.clear();
+            cityField.clear();
+            postalCodeField.clear();
+            phoneNumberField.clear();
+            emailField.clear();
+            
+            // Clear checkboxes
+            studentCouncil.setSelected(false);
+            volunteerWork.setSelected(false);
+            
+            // Clear radio buttons
+            majorGroup.selectToggle(null);
+            
+            // Clear combo box and list view
+            coursesBox.getSelectionModel().clearSelection();
+            selectedCoursesList.getItems().clear();
+            }});
+        
+        	//Add event handler for the Clear button
+        	clearButton.setOnAction(e -> {
+        		
+            // Clear all text fields
+            nameField.clear();
+            addressField.clear();
+            provinceField.clear();
+            cityField.clear();
+            postalCodeField.clear();
+            phoneNumberField.clear();
+            emailField.clear();
+            
+            // Clear checkboxes
+            studentCouncil.setSelected(false);
+            volunteerWork.setSelected(false);
+            
+            // Clear radio buttons
+            majorGroup.selectToggle(null);
+            
+            // Clear combo box and list view
+            coursesBox.getSelectionModel().clearSelection();
+            selectedCoursesList.getItems().clear();
+            
+            // Clear text area
+            textArea.clear();
+        });
    
         // Create the scene and show the stage
         Scene scene = new Scene(root, 800, 500);
